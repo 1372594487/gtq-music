@@ -5,7 +5,7 @@
       enter-active-class="animate__animated animate__fadeIn"
       leave-active-class="animate__animated animate__fadeOut"
     >
-      <keep-alive>
+      <keep-alive >
         <component :is="tabName" class="comp-view"></component>
       </keep-alive>
     </transition>
@@ -59,6 +59,7 @@ export default {
 <style lang="less" scoped>
 .home {
   position: relative;
+  clear: both;
   .comp-view {
     position: absolute;
     left: 0;

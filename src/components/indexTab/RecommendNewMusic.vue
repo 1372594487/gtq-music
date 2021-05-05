@@ -4,7 +4,6 @@
     :key="item.id"
     :music="item"
     >
-
     </Song>
   </ul>
 </template>
@@ -28,7 +27,6 @@ export default {
     try {
       let response = await getNewSong();
       this.data = this.parseData(response);
-      console.log(this.data);
     } catch {
       alert("服务器错误，请重试!");
     } finally {
@@ -39,7 +37,6 @@ export default {
     parseData(response) {
       let result = response.data.result.map(function (currentValue) {
         let artistsName = "";
-
         if (currentValue.song.artists.length >= 2) {
           artistsName =
             currentValue.song.artists[0].name +

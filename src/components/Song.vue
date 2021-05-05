@@ -40,6 +40,10 @@ export default {
       type: Object,
       required: true,
     },
+    currentMusic:{
+      type:Object,
+      
+    }
   },
   data() {
     return {};
