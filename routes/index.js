@@ -1,9 +1,10 @@
 //routeController
+// 导入API，操作mysql
+let api = require(__basename + '/db/api/index')
+//导入utils，调用公共方法
+// let utils = require(__basename + '/')
 class routesController {
-    register(req,res){
-        console.log('req body',req.body);
-        res.send('register succeed')
-    }
+
     //请求域拦截
     // verifyHost(req, res, next) {
     //     if (config.hostOptions.indexOf(req.headers.origin) === -1) {
@@ -76,51 +77,51 @@ class routesController {
     // }
 
     //注册接口
-    // register(req, res) {
-    //     //插入数据 ==> 模型.create(创建数据对象)
+    register(req, res) {
+        //插入数据 ==> 模型.create(创建数据对象)
 
-    //     //查询邮箱是否已被注册
-    //     api.findData({
-    //         modelName: 'User',
-    //         condition: {
-    //             email: req.body.email
-    //         },
-    //         attributes: ['email']
-    //     }).then(result => {
-    //         // console.log("result ==> ",result);
-    //         // res.send('find ok')
-    //         if (result.length > 0) {
-    //             res.send({ msg: '该邮箱已被注册', status: 1002 })
-    //         } else {
-    //             //注册
-    //             //创建用户id
-    //             let userId = '_uid' + new Date().getTime();
-    //             //随机昵称
-    //             let index = Math.floor(Math.random() * config.nickNameOptions.length);
-    //             let nickName = config.nickNameOptions[index] + userId;
-    //             //加密密码
-    //             let password = utils.encodeString(req.body.password);
-    //             console.log('password ==>', password);
-    //             //添加用户数据，注册用户
-    //             api.createData('User', {
-    //                 email: req.body.email,
-    //                 password,
-    //                 nickName,
-    //                 userId
-    //             }).then(result => {
-    //                 res.send({ msg: '注册成功', status: 1000, result });
-    //             }).catch(err => {
-    //                 console.log('err ==> ', err);
-    //                 res.send({ msg: '注册失败', status: 1001 })
-    //             })
-    //         }
-    //     }).catch(err => {
-    //         console.log("err==> ", err);
-    //         res.send({ msg: '注册失败', status: 1001 })
-    //     })
+        //查询邮箱是否已被注册
+        api.findData({
+            modelName: 'User',
+            condition: {
+                email: req.body.email
+            },
+            attributes: ['email']
+        }).then(result => {
+            // console.log("result ==> ",result);
+            // res.send('find ok')
+            if (result.length > 0) {
+                res.send({ msg: '该邮箱已被注册', status: 1002 })
+            } else {
+                //注册
+                //创建用户id
+                let userId = '_uid' + new Date().getTime();
+                //随机昵称
+                let index = Math.floor(Math.random() * config.nickNameOptions.length);
+                let nickName = config.nickNameOptions[index] + userId;
+                //加密密码
+                let password = utils.encodeString(req.body.password);
+                console.log('password ==>', password);
+                //添加用户数据，注册用户
+                api.createData('User', {
+                    email: req.body.email,
+                    password,
+                    nickName,
+                    userId
+                }).then(result => {
+                    res.send({ msg: '注册成功', status: 1000, result });
+                }).catch(err => {
+                    console.log('err ==> ', err);
+                    res.send({ msg: '注册失败', status: 1001 })
+                })
+            }
+        }).catch(err => {
+            console.log("err==> ", err);
+            res.send({ msg: '注册失败', status: 1001 })
+        })
 
 
-    // }
+    }
 }
 
 //

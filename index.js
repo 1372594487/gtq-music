@@ -9,7 +9,8 @@ global.config = require(path.resolve(__basename + '/config/config.js'))
 let routes = require(path.resolve(__basename + '/routes/routes'))
 //导入connect.js 连接mysql
 global.sequelize = require(__basename + '/db/connect.js')
-
+//导入模型集合
+global.model = require(__basename+'/db/models/index');
 //app实例
 let app = express();
 //设置静态目录 '/static/file' 伪路径
