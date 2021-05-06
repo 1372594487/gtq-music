@@ -62,7 +62,7 @@ export default {
 </script>
 
 <style scoped lang="less">
-.newmusic {
+.new-music {
   position: relative;
   padding-bottom: 51px;
   &::after {

@@ -5,9 +5,15 @@
       enter-active-class="animate__animated animate__fadeIn"
       leave-active-class="animate__animated animate__fadeOut"
     >
-      <keep-alive >
+      <keep-alive>
         <component :is="tabName" class="comp-view"></component>
       </keep-alive>
+    </transition>
+    <transition
+      enter-active-class="animate__animated animate__fadeIn"
+      leave-active-class="animate__animated animate__fadeOut"
+    >
+      <Player v-show="tabName !='UserTab'"></Player>
     </transition>
   </div>
 </template>
@@ -18,6 +24,7 @@ import indexTab from "../components/indexTab";
 import HotTab from "../components/HotTab";
 import SearchTab from "../components/SearchTab";
 import UserTab from "../components/UserTab";
+import Player from "../components/Player";
 export default {
   name: "Home",
   components: {
@@ -26,6 +33,7 @@ export default {
     HotTab,
     SearchTab,
     UserTab,
+    Player,
   },
   data() {
     return {

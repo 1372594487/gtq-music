@@ -138,6 +138,7 @@ export default {
     onActivated(() => {
       state.email = "";
       state.password = "";
+
     });
 
     const sendCode = (seconds) => {
@@ -253,6 +254,7 @@ export default {
     margin: 10px 20px 10px 0;
     vertical-align: middle;
     border-radius: 15px;
+    font-size: 13px;
   }
 }
 input:-webkit-autofill,
