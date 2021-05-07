@@ -17,7 +17,7 @@
       <div class="song-play">
         <span
           class="play-active"
-          :class="{ paused:playerStatus }"
+          :class="{ paused:!playerStatus}"
           v-if="currentMusic && currentMusic.id === music.id"
         >
           <i></i>
@@ -40,6 +40,10 @@ export default {
       type: Object,
       required: true,
     },
+    songList:{
+      type:Array,
+      required: true,
+    }
   },
   data() {
     return {};
@@ -49,12 +53,13 @@ export default {
   },
   methods: {
     ...mapActions(["getMusicData"]),
-    ...mapMutations(["changePlayBar"]),
+    ...mapMutations(["changePlayBar","changePlayerStatus","setSongList","setCurrentIndex"]),
     async playMusic(music) {
       try {
         //
         await this.getMusicData(music);
-        this.changePlayBar();
+        this.changePlayerStatus(true);
+        this.changePlayBar(true);
       } catch (err) {
         console.log(err);
       } finally {

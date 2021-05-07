@@ -19,7 +19,6 @@ const actions = {
             let musicDetailData = await getMusicDetail(music.id);
             let musicLycicData = await getLrc(music.id);
             const {lyric} = lyricParser(musicLycicData.data);
-
             let currentMusicData = {
                 id: music.id,
                 url: musicUrlData.data.data[0].url,
@@ -31,7 +30,6 @@ const actions = {
             if (!currentMusicData.url) {
                 return Promise.reject('false');
               }
-        
               commit('setCurrentMusic', currentMusicData);
         }else{
             return Promise.reject('false');
@@ -70,7 +68,6 @@ const actions = {
           name: response.data.playlist.name,
           imgUrl: response.data.playlist.coverImgUrl,
         };
-    
         commit('setListDetail', playlistDetail);
       },
 }

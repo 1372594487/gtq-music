@@ -1,5 +1,5 @@
 <template>
-  <div class="play">
+  <div class="play" :class="{paused:!playerStatus}">
     <audio
       :src="
         'https://music.163.com/song/media/outer/url?id=' +
@@ -18,19 +18,17 @@
       leave-active-class="animate__animated animate__slideOutDown"
     >
       <div class="play-bar" v-show="isShowPlayBar">
-        <img
-          :src="currentMusic.imgUrl"
-          alt=""
-        />
+        <img :src="currentMusic.imgUrl" alt="" />
         <h5>
           {{ currentMusic.song }}
-          <p style="fontSize:13px">{{currentMusic.singer}}</p>
+          <p style="fontsize: 13px">{{ currentMusic.singer }}</p>
         </h5>
         <div class="control" @click.stop="togglePlayState">
           <canvas ref="circle" width="50" height="50"></canvas>
-          <!-- 暂停 -->
           <span class="icon">
-            <span v-if="!playerStatus"
+          <!-- 暂停 -->
+            <span 
+            v-if="playerStatus"
               ><svg
                 t="1609963355731"
                 class="icon"
@@ -78,7 +76,7 @@
 // import PlayFullyric from "@/components/PlayFullyric.vue";
 // import PlayFullChart from "@/components/PlayFullChart.vue";
 // import PlayFullFooter from "@/components/PlayFullFooter.vue";
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 export default {
   props: ["currentIndex", "playlist"],
   components: {
@@ -91,9 +89,105 @@ export default {
     return {};
   },
   computed: {
-    ...mapGetters(["currentMusic", "isShowPlayBar", "isShowLyric", "duration","playerStatus"]),
+    ...mapGetters([
+      "currentMusic",
+      "isShowPlayBar",
+      "isShowLyric",
+      "currentTime",
+      "totalTime",
+      "playerStatus",
+    ]),
   },
-  watch: {
+  watch: {},
+  mounted() {
+    //
+    // console.log("mounted", this.$refs.audio);
+    let audio = this.$refs.audio;
+    //
+    audio.addEventListener("pause", () => {
+      this.changePlayerStatus(false);
+      console.log(this.playerStatus);
+    });
+    //
+    audio.addEventListener("play", () => {
+      this.changePlayerStatus(true);
+    });
+    //
+    audio.addEventListener("durationchange", () => {
+      this.setTotalTime(audio.duration);
+      console.log(this.totalTime,audio.duration);
+    });
+    //
+    audio.addEventListener("timeupdate", () => {
+      //
+      this.setCurrentTime(audio.currentTime);
+      //canvas
+      this.drawCircle(audio.currentTime,audio.duration);
+    });
+    //
+    audio.addEventListener("ended", () => {
+      // 播放完成下一曲
+      this.playNext();
+    });
+  },
+  methods: {
+    ...mapMutations(["setCurrentTime", "setTotalTime", "changePlayerStatus"]),
+    togglePlayState: function () {
+      let audio = this.$refs.audio;
+      if (this.playerStatus) {
+      console.log(this.playerStatus,"now pause");
+        audio.pause();
+      } else {
+        console.log(this.playerStatus,"now play");
+        audio.play();
+      }
+    },
+    drawCircle: function (currentTime, totalTime) {
+      let canvas = this.$refs.circle;
+      let ctx = canvas.getContext("2d");
+
+      ctx.clearRect(0, 0, 50, 50);
+      ctx.beginPath();
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.3)";
+      ctx.arc(25, 25, 20, 0, Math.PI * 2, false); // 绘制
+      ctx.stroke();
+      ctx.closePath();
+
+      ctx.beginPath();
+      ctx.strokeStyle = "rgba(255, 0, 0, 0.6)";
+      ctx.arc(
+        25,
+        25,
+        19,
+        Math.PI * -0.5,
+        Math.PI * ((currentTime / totalTime) * 2 - 0.5),
+        false
+      ); // 绘制
+      ctx.stroke();
+      ctx.closePath();
+    },
+    //play next song
+    playNext: function () {
+      console.log("下一曲");
+      // let index = this.calculateNext();
+      // this.$emit("update:music", {
+      //   item: this.playlist[index],
+      //   index,
+      // });
+    },
+    //
+    calculateNext: function () {
+      // 根据当前播放模式 随机 单曲循环 顺序 顺序循环
+      //顺序循环
+      // let nextIndex;
+      // if (this.currentIndex < this.playlist.length - 1) {
+      //   nextIndex = this.currentIndex + 1;
+      // } else {
+      //   nextIndex = 0;
+      // }
+      // return nextIndex;
+    },
+    //
   },
 };
 </script>

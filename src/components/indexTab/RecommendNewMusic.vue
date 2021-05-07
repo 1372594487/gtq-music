@@ -3,6 +3,7 @@
     <Song v-for="item in data"
     :key="item.id"
     :music="item"
+    :songList="data"
     >
     </Song>
   </ul>
@@ -11,6 +12,7 @@
 <script>
 import Song from "../Song";
 import { getNewSong } from "../../api/getData";
+// import {mapMutations} from "vuex"
 export default {
   name: "RecommendNewMusic",
   components: {
@@ -27,6 +29,7 @@ export default {
     try {
       let response = await getNewSong();
       this.data = this.parseData(response);
+      // this.setSongList(this.data);
     } catch {
       alert("服务器错误，请重试!");
     } finally {
@@ -34,6 +37,7 @@ export default {
     }
   },
   methods: {
+    // ...mapMutations(['setSongList']),
     parseData(response) {
       let result = response.data.result.map(function (currentValue) {
         let artistsName = "";

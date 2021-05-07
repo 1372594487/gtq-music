@@ -8,7 +8,8 @@ const target = 'http://localhost:10001';
 export const getReco = () => axios.get(`${BaseUrl}/personalized`)
 //最新歌曲列表
 export const getNewSong = () => axios.get(`${BaseUrl}/personalized/newsong`)
-
+//播放列表
+// export const getSongList =()=>axios.get(`${BaseUrl}/`)
 //banner?type=2 iphone
 export const getBanner = () => axios.get(`${BaseUrl}//banner?type=2`)
 

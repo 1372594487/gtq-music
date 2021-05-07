@@ -8,7 +8,9 @@ const getters = {
   playerStatus: (state) => state.playerStatus,
   isShowPlayBar: (state) => state.isShowPlayBar,
   isShowLyric: (state) => state.isShowLyric,
-  duration: (state) => state.duration,
+  totalTime: (state) => state.totalTime,
+  songList:(state) => state.songList,
+  currentIndex:(state)=>state.currentIndex,
 };
 
 export default getters;

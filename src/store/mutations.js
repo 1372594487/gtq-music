@@ -7,6 +7,14 @@ const mutations = {
     //设置toast组件是否显示
     state.isToast = show;
   },
+  setSongList(state,data){
+    //设置播放列表
+    state.songList = data;
+  },
+  setCurrentIndex(state,data){
+    //设置播放列表
+    state.currentIndex = data;
+  },
   setCurrentMusic(state, data) {
     //设置当前播放音乐数据
     state.currentMusic = data;
@@ -23,18 +31,24 @@ const mutations = {
     //设置播放进度
     state.currentTime = data;
   },
-  changePlayerStatus(state) {
-    //设置播放状态
-    if (state.playerStatus) {
-      state.playerStatus = false;
-    } else {
-      state.playerStatus = true;
-    }
+  setTotalTime(state, data) {
+    //设置歌曲播放时间
+    state.totalTime = data;
   },
-  changePlayBar(state) {
-    if (!state.isShowPlayBar) {
-      state.isShowPlayBar = true
-    }
+  changePlayerStatus(state, status) {
+    //设置播放状态
+      state.playerStatus = status;
+    //  else {
+    //   if (state.playerStatus) {
+    //     state.playerStatus = false;
+    //   } else {
+    //     state.playerStatus = true;
+    //   }
+    // }
+
+  },
+  changePlayBar(state,status) {
+      state.isShowPlayBar = status
   }
 };
 
