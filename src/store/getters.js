@@ -7,6 +7,7 @@ const getters = {
   currentTime: (state) => state.currentTime,
   playerStatus: (state) => state.playerStatus,
   isShowPlayBar: (state) => state.isShowPlayBar,
+  isShowPlayFull: (state) => state.isShowPlayFull,
   isShowLyric: (state) => state.isShowLyric,
   totalTime: (state) => state.totalTime,
   songList:(state) => state.songList,

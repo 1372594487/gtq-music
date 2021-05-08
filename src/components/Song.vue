@@ -60,6 +60,8 @@ export default {
         await this.getMusicData(music);
         this.changePlayerStatus(true);
         this.changePlayBar(true);
+        this.setSongList(this.songList);
+        this.setCurrentIndex(this.currentIndex)
       } catch (err) {
         console.log(err);
       } finally {

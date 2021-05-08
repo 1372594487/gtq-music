@@ -1,13 +1,12 @@
 <template>
   <div
     class="fullchart"
-    :class="{ paused: paused }"
-    @click="$emit('toggle-show-lyric')"
+    :class="{ paused:!playerStatus }"
   >
     <div class="top">
       <img
         ref="aim"
-        :class="[paused ? 'pause-aim' : 'playing-aim']"
+        :class="[!playerStatus ? 'pause-aim' : 'playing-aim']"
         src="https://s3.music.126.net/mobile-new/img/needle-plus.png?994aa910ce3e4d242eb7076620b0e502="
         alt=""
       />
@@ -19,7 +18,7 @@
             src="https://p5.music.126.net/obj/wo3DlcOGw6DClTvDisK1/4602256867/5855/63fb/325b/d7e4e3a244701ee85fecb5d4f6b5bd57.png?imageView=&quality=75&thumbnail=200y200"
             alt=""
           />
-          <div class="img"><img :src="imgSrc" alt="" /></div>
+          <div class="img"><img :src="currentMusic.imgUrl" alt="" /></div>
         </div>
       </div>
     </div>
@@ -27,19 +26,31 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations } from "vuex";
 export default {
-  props: ["imgSrc", "paused"],
-  watch: {
-    paused: function () {
-      console.log("paused", this.paused);
-      // if(this.paused){
-      //   this.$refs.aim.style.animationPlayState=`paused`
-      //   console.log("set");
-      // }else{
-      //   this.$refs.aim.style.animationPlayState=`running`
-      // }
-    },
+  computed: {
+    ...mapGetters([
+      "currentMusic",
+      "isShowPlayBar",
+      "isShowPlayFull",
+      "isShowLyric",
+      "currentTime",
+      "totalTime",
+      "playerStatus",
+      "songList",
+      "currentIndex",
+    ]),
   },
+  methods:{
+    ...mapMutations([
+      "setCurrentTime",
+      "setTotalTime",
+      "changePlayerStatus",
+      "setCurrentIndex",
+      "changePlayBar",
+      "changePlayFull",
+    ]),
+  }
 };
 </script>
 

@@ -1,9 +1,10 @@
 <template>
   <ul class="new-music">
-    <Song v-for="item in data"
+    <Song v-for="(item,index) in data"
     :key="item.id"
     :music="item"
     :songList="data"
+    :currentIndex="index"
     >
     </Song>
   </ul>

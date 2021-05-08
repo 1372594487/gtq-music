@@ -12,6 +12,7 @@ const state = {
   isShowLyric: false,
   totalTime: 0,
   isShowPlayBar:false,
+  isShowPlayFull:false,
 };
 
 export default state;

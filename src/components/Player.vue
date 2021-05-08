@@ -1,5 +1,5 @@
 <template>
-  <div class="play" :class="{paused:!playerStatus}">
+  <div class="play" :class="{ paused: !playerStatus }">
     <audio
       :src="
         'https://music.163.com/song/media/outer/url?id=' +
@@ -12,13 +12,14 @@
       ref="audio"
       hidden
     ></audio>
+
     <transition
       name="custom-classes-transition"
       enter-active-class="animate__animated animate__slideInUp"
       leave-active-class="animate__animated animate__slideOutDown"
     >
       <div class="play-bar" v-show="isShowPlayBar">
-        <img :src="currentMusic.imgUrl" alt="" />
+        <img :src="currentMusic.imgUrl" alt="" @click="showPlayFull" />
         <h5>
           {{ currentMusic.song }}
           <p style="fontsize: 13px">{{ currentMusic.singer }}</p>
@@ -26,9 +27,8 @@
         <div class="control" @click.stop="togglePlayState">
           <canvas ref="circle" width="50" height="50"></canvas>
           <span class="icon">
-          <!-- 暂停 -->
-            <span 
-            v-if="playerStatus"
+            <!-- 暂停 -->
+            <span v-if="playerStatus"
               ><svg
                 t="1609963355731"
                 class="icon"
@@ -68,21 +68,41 @@
         </div>
       </div>
     </transition>
+
+    <transition
+      name="custom-classes-transition"
+      enter-active-class="animate__animated animate__fadeIn"
+      leave-active-class="animate__animated animate__fadeOut"
+    >
+      <div class="play-full" v-if="isShowPlayFull">
+        <!-- background -->
+        <div
+          class="bg"
+          :style="{
+            backgroundImage: 'url(' + currentMusic.imgUrl + ')',
+          }"
+        ></div>
+        <!-- header -->
+        <PlayFullHeader></PlayFullHeader>
+        <!-- lyric -->
+            <PlayFullChart
+            />
+      </div>
+    </transition>
   </div>
 </template>
 
 <script>
-// import PlayFullHeader from "@/components/PlayFullHeader.vue";
+import PlayFullHeader from "@/components/PlayFullHeader.vue";
+import PlayFullChart from "@/components/PlayFullChart.vue";
 // import PlayFullyric from "@/components/PlayFullyric.vue";
-// import PlayFullChart from "@/components/PlayFullChart.vue";
 // import PlayFullFooter from "@/components/PlayFullFooter.vue";
-import { mapGetters, mapMutations } from "vuex";
+import { mapGetters, mapMutations, mapActions } from "vuex";
 export default {
-  props: ["currentIndex", "playlist"],
   components: {
-    // PlayFullHeader,
+    PlayFullHeader,
+    PlayFullChart,
     // PlayFullyric,
-    // PlayFullChart,
     // PlayFullFooter,
   },
   data: function () {
@@ -92,10 +112,13 @@ export default {
     ...mapGetters([
       "currentMusic",
       "isShowPlayBar",
+      "isShowPlayFull",
       "isShowLyric",
       "currentTime",
       "totalTime",
       "playerStatus",
+      "songList",
+      "currentIndex",
     ]),
   },
   watch: {},
@@ -115,30 +138,37 @@ export default {
     //
     audio.addEventListener("durationchange", () => {
       this.setTotalTime(audio.duration);
-      console.log(this.totalTime,audio.duration);
+      console.log(this.totalTime, audio.duration);
     });
     //
     audio.addEventListener("timeupdate", () => {
       //
       this.setCurrentTime(audio.currentTime);
       //canvas
-      this.drawCircle(audio.currentTime,audio.duration);
+      this.drawCircle(audio.currentTime, audio.duration);
     });
     //
     audio.addEventListener("ended", () => {
       // 播放完成下一曲
+      console.log("end");
       this.playNext();
     });
   },
   methods: {
-    ...mapMutations(["setCurrentTime", "setTotalTime", "changePlayerStatus"]),
+    ...mapActions(["getMusicData"]),
+    ...mapMutations([
+      "setCurrentTime",
+      "setTotalTime",
+      "changePlayerStatus",
+      "setCurrentIndex",
+      "changePlayBar",
+      "changePlayFull",
+    ]),
     togglePlayState: function () {
       let audio = this.$refs.audio;
       if (this.playerStatus) {
-      console.log(this.playerStatus,"now pause");
         audio.pause();
       } else {
-        console.log(this.playerStatus,"now play");
         audio.play();
       }
     },
@@ -169,25 +199,28 @@ export default {
     //play next song
     playNext: function () {
       console.log("下一曲");
-      // let index = this.calculateNext();
-      // this.$emit("update:music", {
-      //   item: this.playlist[index],
-      //   index,
-      // });
+      let index = this.calculateNext();
+      console.log(index);
+      this.getMusicData(this.songList[index]);
+      this.setCurrentIndex(index);
     },
     //
     calculateNext: function () {
       // 根据当前播放模式 随机 单曲循环 顺序 顺序循环
       //顺序循环
-      // let nextIndex;
-      // if (this.currentIndex < this.playlist.length - 1) {
-      //   nextIndex = this.currentIndex + 1;
-      // } else {
-      //   nextIndex = 0;
-      // }
-      // return nextIndex;
+      let nextIndex;
+      if (this.currentIndex < this.songList.length - 1) {
+        nextIndex = this.currentIndex + 1;
+      } else {
+        nextIndex = 0;
+      }
+      return nextIndex;
     },
     //
+    showPlayFull: function () {
+      this.changePlayBar(false);
+      this.changePlayFull(true);
+    },
   },
 };
 </script>

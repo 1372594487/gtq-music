@@ -1,7 +1,7 @@
 <template>
   <div class="header">
     <div class="content">
-      <div class="left" @click="$emit('show-play-bar')">
+      <div class="left" @click="backTo">
         <svg
           t="1609145675059"
           class="icon"
@@ -20,20 +20,9 @@
         </svg>
       </div>
       <div class="mid">
-        <p class="singer">
-          {{ currentMusic.name ? currentMusic.name : currentMusic.ar[0].name }}
-        </p>
-        
-        <template v-if="currentMusic.song">
-          <span class="song" v-for="(item, index) in currentMusic.song.artists" :key="index">
-            <template v-if="index"> / </template>{{ item.name }}
-          </span>
-        </template>
-        <template v-else>
-          <span class="song" v-for="(item, index) in currentMusic.ar" :key="index">
-            <template v-if="index"> / </template>{{ item.name }}
-          </span>
-        </template>
+        <h4>{{currentMusic.song}}
+          <p style="font-size:12px">{{currentMusic.singer}}</p>
+        </h4>
       </div>
       <div class="right">
         <svg
@@ -58,16 +47,44 @@
 </template>
 
 <script>
+import { mapGetters, mapMutations, mapActions } from "vuex";
 export default {
-  props: ["currentMusic"],
   created() {
-    console.log(this.currentMusic);
+  },
+  computed: {
+    ...mapGetters([
+      "currentMusic",
+      "isShowPlayBar",
+      "isShowPlayFull",
+      "isShowLyric",
+      "currentTime",
+      "totalTime",
+      "playerStatus",
+      "songList",
+      "currentIndex",
+    ]),
+  },
+  methods: {
+    ...mapActions(["getMusicData"]),
+    ...mapMutations([
+      "setCurrentTime",
+      "setTotalTime",
+      "changePlayerStatus",
+      "setCurrentIndex",
+      "changePlayBar",
+      "changePlayFull",
+    ]),
+    backTo: function () {
+      this.changePlayBar(true);
+      this.changePlayFull(false);
+    },
   },
 };
 </script>
 
 <style scoped lang="less">
 .header {
+  padding: 4px 0;
   position: relative;
   z-index: 99;
   .content {
@@ -75,7 +92,6 @@ export default {
     text-align: center;
     .left {
       flex: 1;
-
       svg {
         position: relative;
         top: 50%;
@@ -85,12 +101,6 @@ export default {
     }
     .mid {
       flex: 4;
-      .singer {
-        font-size: 1em;
-      }
-      .song {
-        font-size: 0.5em;
-      }
     }
     .right {
       flex: 1;

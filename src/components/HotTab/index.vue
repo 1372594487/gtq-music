@@ -11,7 +11,12 @@
     <section v-else style="padding-bottom: 68px">
       <div v-if="loading">loading...</div>
       <div v-else>
-        <Song v-for="item in rank" :key="item.id" :music="item"></Song>
+        <Song v-for="(item,index) in rank"
+        :key="item.id"
+        :music="item"
+        :songList="rank"
+        :currentIndex="index"
+        ></Song>
       </div>
     </section>
   </div>

@@ -49,6 +49,9 @@ const mutations = {
   },
   changePlayBar(state,status) {
       state.isShowPlayBar = status
+  },
+  changePlayFull(state,status){
+      state.isShowPlayFull = status
   }
 };
 
