@@ -10,5 +10,8 @@ module.exports = app => {
     //注册接口
     // app.post('/register', routesController.register);
     app.post('/register',routesController.register);
+
+    //发送验证码
+    app.post('/email',routesController.email);
     
 }

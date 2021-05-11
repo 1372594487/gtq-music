@@ -2,7 +2,7 @@
 // 导入API，操作mysql
 let api = require(__basename + '/db/api/index')
 //导入utils，调用公共方法
-// let utils = require(__basename + '/')
+let utils = require(__basename + '/utils/utils')
 class routesController {
 
     //请求域拦截
@@ -79,7 +79,7 @@ class routesController {
     //注册接口
     register(req, res) {
         //插入数据 ==> 模型.create(创建数据对象)
-
+        console.log(req.body);
         //查询邮箱是否已被注册
         api.findData({
             modelName: 'User',
@@ -118,6 +118,47 @@ class routesController {
         }).catch(err => {
             console.log("err==> ", err);
             res.send({ msg: '注册失败', status: 1001 })
+        })
+
+
+    }
+    //发邮件
+    email(req, res) {
+        console.log("req.body", req.body.email);
+        //生成随机验证码
+        let code = utils.randomCode();
+        console.log('code ==> ', code);
+        //生成唯一id
+        let codeId = 'cid' + new Date().getTime();
+        //先存储验证码，再发邮件给用户
+        api.createData('Code', {
+            email: req.body.email,
+            codeId,
+            text: code
+        }).then(result => {
+            console.log('result.dataValues ==> ', result);
+            if (result.dataValues) {
+                res.send({ msg: `验证码已发至${result.email}`, status: 1010, cid: codeId });
+                return
+                //发邮件
+                utils.sendEmail({
+                    to: req.body.email,
+                    subject: '验证码',
+                    text: `验证码为${code},${config.emailOptions.expires / 1000 / 60}分钟内有效`
+                }).then(result => {
+                    console.log('result==> ', result);
+                    res.send({ msg: `验证码已发至${result.accepted[0]}`, status: 1010, cid: codeId });
+                }).catch(err => {
+                    console.log("err==> ", err);
+                    res.send({ msg: '发送验证码失败', status: 1001 })
+                })
+            } else {
+                res.send({ msg: '发送验证码失败！', status: 1011 })
+
+            }
+        }).catch(err => {
+            console.log('err ==> ', err);
+            res.send({ msg: '发送验证码失败！', status: 1011 })
         })
 
 
