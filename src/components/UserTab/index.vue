@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import { Register } from "../../api/getData";
+import { Register,SendEmail } from "../../api/getData";
 import { onActivated, reactive } from "vue";
 import { Toast } from "vant";
 export default {
@@ -129,7 +129,7 @@ export default {
     const validCode = (val) =>
       new Promise((resolve) => {
         resolve(/^[/d]{6}$/.test(val));
-      });
+      })
 
     const togglePasswordType = () => {
       state.isPassword = !state.isPassword;
@@ -140,11 +140,15 @@ export default {
       state.password = "";
 
     });
-
+    // const promise = new Promise.all([validEmail,validPassword,validCode]).then((res)=>{
+    //   console.log(res);
+    // })
     const sendCode = (seconds) => {
+
       let time = seconds;
       state.text3 = `${time}s后重新发送`;
       state.isSend = true;
+      
       let timer = setInterval(() => {
         if (time == 1) {
           clearInterval(timer);
@@ -154,9 +158,16 @@ export default {
         } else {
           time--;
           state.text3 = `${time}s后重新发送`;
+          
         }
       }, 1000);
+      //
+          SendEmail({email:state.email,password:state.password,code:state.code}).then((res)=>{
+            console.log(res);
+            Toast(res.data.msg);
+          })
     };
+
 
     const login = () => {};
     const register = () => {

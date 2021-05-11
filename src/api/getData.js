@@ -33,10 +33,20 @@ export const login = () => axios.post(`${target}/login`)
 //register
 export const Register = ({email,password,code}) => axios({
     method: 'POST',
-    url: `http://localhost:10001/register`,
+    url: `${target}/register`,
     data: {
         email,
         password,
         code,
     }
+})
+//send Email
+export const SendEmail = ({email,password,code}) => axios({
+  method: 'POST',
+  url: `${target}/email`,
+  data: {
+      email,
+      password,
+      code,
+  }
 })
