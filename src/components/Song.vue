@@ -52,11 +52,16 @@ export default {
     ...mapGetters(["currentMusic", "playerStatus"]),
   },
   methods: {
-    ...mapActions(["getMusicData"]),
+    ...mapActions(["getMusicData","MygetData"]),
     ...mapMutations(["changePlayBar","changePlayerStatus","setSongList","setCurrentIndex"]),
     async playMusic(music) {
+      console.log(music);
       try {
         //
+        if(!music.checked){
+          this.MygetData(music);
+          return;
+        }
         await this.getMusicData(music);
         this.changePlayerStatus(true);
         this.changePlayBar(true);

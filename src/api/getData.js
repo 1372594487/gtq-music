@@ -31,12 +31,21 @@ export const getLrc = (id) => axios.get(`${BaseUrl}/lyric?id=${id}`);
 //login
 export const login = () => axios.post(`${target}/login`)
 //register
-export const Register = ({email,password,code}) => axios({
-    method: 'POST',
-    url: `http://localhost:10001/register`,
-    data: {
-        email,
-        password,
-        code,
-    }
+export const Register = ({
+  email,
+  password,
+  code
+}) => axios({
+  method: 'POST',
+  url: `http://localhost:10001/register`,
+  data: {
+    email,
+    password,
+    code,
+  }
 })
+//search
+export const searchDefault = () => axios.get(`${BaseUrl}/search/hot`)
+export const searchedList = (v) => axios.get(`${BaseUrl}/search/suggest?keywords=${v}&type=mobile`)
+export const getSuggestList = (words) => axios.get(`${BaseUrl}/search?keywords= ${words}`)
+export const getSongById = (ids) => axios.get(`${BaseUrl}/song/detail?ids=${ids}`)

@@ -48,7 +48,6 @@
       </div>
     </div>
 
-
     <div class="default" v-if="!inputValue">
       <section>
         <p>热门搜索</p>
@@ -100,25 +99,30 @@
     </div>
     <div class="searched" v-if="!inputing && inputValue">
       <ul>
-        <!-- <PlayListMusic
-        
-          @update:music="$emit('update:music', $event)"
-          @update:playlist="$emit('update:playlist', $event)"
-          :songs="Songs"
-          :currentMusic="$attrs.currentMusic"
-          :paused="$attrs.paused"
-          :select="1"
-        ></PlayListMusic> -->
+        <Song
+          v-for="(item, index) in Songs"
+          :key="item.id"
+          :music="item"
+          :songList="Songs"
+          :currentIndex="index"
+        >
+        </Song>
       </ul>
     </div>
   </div>
 </template>
 
 <script>
+import {
+  searchDefault,
+  searchedList,
+  getSuggestList,
+  getSongById,
+} from "../../api/getData";
+import Song from "../Song";
 export default {
-  props:["isShowPage"],
-  components:{
-  },
+  props: ["isShowPage"],
+  components: { Song },
   data: function () {
     return {
       inputValue: "",
@@ -127,96 +131,111 @@ export default {
       defaultSuggests: [],
       isReady_Suggest: false,
       listIds: [],
-      Songs:null,
-      isReady_Song:false,
+      Songs: null,
+      isReady_Song: false,
     };
   },
   watch: {
-    inputValue: function (v) {
-      if (v) {
+    inputValue: function (value) {
+      if (value) {
         if (this.inputing) {
-          // axios.get("/search/suggest?keywords=" + v + "&type=mobile").then((res) => {
-          //   console.log(res.data.result.allMatch);
-          //   this.suggests = res.data.result.allMatch;
-          // });
+          console.log("inputing");
+          searchedList(value).then((res) => {
+            if(!res.data.result.allMatch) return;
+            this.suggests = res.data.result.allMatch;
+          });
         } else {
-          // console.log(v);
-          this.getSuggestLists(v);
+          console.log("getSuggestLists");
+          this.getSuggestLists(value);
         }
       } else {
         this.inputing = false;
         this.suggests = [];
       }
     },
-    listIds:function(v){
-      if(v){
-        this.getSongs(v)
+    listIds: function (v) {
+      if (v) {
+        this.getSongs(v);
         this.$toast.loading({
-        message: "加载中...",
-      });
+          message: "加载中...",
+        });
       }
     },
-    isReady_Song:function(v){
-      if(v){
+    isReady_Song: function (v) {
+      if (v) {
         this.$toast.success({
-        message: "加载完成",
-      });
+          message: "加载完成",
+        });
       }
-    }
+    },
   },
   created() {
-    console.log("Search created");
     this.isReady_Suggest = false;
     this.getDefaultSuggests();
   },
   methods: {
     getDefaultSuggests: function () {
-      // axios.get("/search/hot").then((res) => {
-      //   if (res) {
-      //     this.handleSuggests(res.data.result.hots);
-      //   }
-      // });
+      searchDefault().then((res) => {
+        if (res) this.handleSuggests(res.data.result.hots);
+      });
     },
     handleSuggests: function (arrs) {
       this.defaultSuggests = arrs.map((v) => {
         return v.first;
       });
-      // console.log(this.defaultSuggests);
     },
     getSuggestLists: function (words) {
-      console.log(words);
-      // axios.get(`/search?keywords= ${words}`).then((res) => {
-      //   if (res) {
-      //     // console.log("getSuggests",res.data.result.songs);
-      //     this.handleSuggestListIds(res.data.result.songs.slice(0, 9));
-      //     // console.log(this.listIds);
-      //   }
-      // });
+      getSuggestList(words).then((res) => {
+        if (res) {
+          this.handleSuggestListIds(res.data.result.songs.slice(0, 9));
+        }
+      });
     },
     handleSuggestListIds: function (lists) {
       if (lists.length >= 8) {
-        this.listIds = lists.map((item) => {
-          let id = item.id;
-          return id;
-        }).join(",");
+        this.listIds = lists
+          .map((item) => {
+            let id = item.id;
+            return id;
+          })
+          .join(",");
       } else {
         console.log("不足9首");
       }
     },
     getSongs: function (ids) {
-      console.log("getSongs()");
       //init
-      this.Songs=null;
-      //歌曲详情接口
-      console.log(ids);
-      // axios.get(`/song/detail?ids=${ids}`).then((response) => {
-      //   if (response.data && response.data.code == 200) {
-      //     this.Songs = response.data.songs;
-      //     this.isReady_Song = true;
-      //     console.log(this.Songs);
-      //   }
-      // });
-      // /song/detail?ids="这个id是音乐id"
+      this.Songs = null;
+      getSongById(ids).then((response) => {
+        if (response) {
+          this.Songs = this.parseData(response);
+          this.isReady_Song = true;
+        }
+      });
+    },
+    parseData(response) {
+      console.log(response.data.songs);
+      let result = response.data.songs.map(function (currentValue) {
+        let artistsName = "";
+        if (currentValue.ar.length >= 2) {
+          artistsName =
+            currentValue.ar[0].name +
+            "/" +
+            currentValue.ar[1].name;
+        } else {
+          artistsName = currentValue.ar[0].name;
+        }
+
+        let obj = {
+          id: currentValue.al.id,
+          title: currentValue.al.name,
+          artists: artistsName,
+          album: currentValue.al.name,
+          checked:false
+        };
+        return obj;
+      });
+      return result;
     },
   },
 };
@@ -264,11 +283,12 @@ export default {
     padding: 1em;
     ul {
       margin-top: 0.5em;
+      text-align: left;
       li {
         display: inline-block;
         padding: 0.3em 0.5em;
         text-align: center;
-        border: gainsboro 1px solid;
+        border: black 1px solid;
         border-radius: 30px;
         margin: 0 0.5em 0.5em 0;
       }
@@ -276,6 +296,7 @@ export default {
   }
   .searching {
     padding-top: 1em;
+    text-align: left;
     p {
       color: skyblue;
       padding-left: 1em;

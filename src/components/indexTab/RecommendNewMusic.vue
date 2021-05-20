@@ -30,7 +30,7 @@ export default {
     try {
       let response = await getNewSong();
       this.data = this.parseData(response);
-      // this.setSongList(this.data);
+      console.log(this.data);
     } catch {
       alert("服务器错误，请重试!");
     } finally {
@@ -40,6 +40,7 @@ export default {
   methods: {
     // ...mapMutations(['setSongList']),
     parseData(response) {
+      console.log(response.data.result);
       let result = response.data.result.map(function (currentValue) {
         let artistsName = "";
         if (currentValue.song.artists.length >= 2) {
