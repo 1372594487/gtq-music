@@ -31,6 +31,7 @@ export const getLrc = (id) => axios.get(`${BaseUrl}/lyric?id=${id}`);
 //login
 export const login = () => axios.post(`${target}/login`)
 //register
+<<<<<<< HEAD
 export const Register = ({
   email,
   password,
@@ -49,3 +50,24 @@ export const searchDefault = () => axios.get(`${BaseUrl}/search/hot`)
 export const searchedList = (v) => axios.get(`${BaseUrl}/search/suggest?keywords=${v}&type=mobile`)
 export const getSuggestList = (words) => axios.get(`${BaseUrl}/search?keywords= ${words}`)
 export const getSongById = (ids) => axios.get(`${BaseUrl}/song/detail?ids=${ids}`)
+=======
+export const Register = ({email,password,code}) => axios({
+    method: 'POST',
+    url: `${target}/register`,
+    data: {
+        email,
+        password,
+        code,
+    }
+})
+//send Email
+export const SendEmail = ({email,password,code}) => axios({
+  method: 'POST',
+  url: `${target}/email`,
+  data: {
+      email,
+      password,
+      code,
+  }
+})
+>>>>>>> 213145b0af8c9825e7e2516182b2e13960965744
