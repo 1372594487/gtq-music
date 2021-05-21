@@ -46,9 +46,10 @@ export default {
       }
        else {
         let response = await getReco();
+        console.log(response);
         let handledList = this.parseData(response);
         this._localStorage(handledList);
-          this.remdList = this.parseData(response);
+        this.remdList = this.parseData(response);
       }
     } catch {
       console.log("服务器错误，请重试！");
@@ -57,7 +58,6 @@ export default {
     }
   },
   mounted() {
-    console.log("mounted");
   },
   methods: {
     parseData: function (response) {

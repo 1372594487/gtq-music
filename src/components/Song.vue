@@ -17,7 +17,7 @@
       <div class="song-play">
         <span
           class="play-active"
-          :class="{ paused:!playerStatus}"
+          :class="{ paused: !playerStatus }"
           v-if="currentMusic && currentMusic.id === music.id"
         >
           <i></i>
@@ -39,11 +39,13 @@ export default {
     music: {
       type: Object,
       required: true,
+      default: () => {},
     },
-    songList:{
-      type:Array,
+    songList: {
+      type: Array,
       required: true,
-    }
+      default: () => [],
+    },
   },
   data() {
     return {};
@@ -52,25 +54,23 @@ export default {
     ...mapGetters(["currentMusic", "playerStatus"]),
   },
   methods: {
-    ...mapActions(["getMusicData","MygetData"]),
-    ...mapMutations(["changePlayBar","changePlayerStatus","setSongList","setCurrentIndex"]),
-    async playMusic(music) {
-      console.log(music);
+    ...mapActions(["getMusicData", "MygetData"]),
+    ...mapMutations([
+      "changePlayBar",
+      "changePlayerStatus",
+      "setSongList",
+      "setCurrentIndex",
+    ]),
+    playMusic(music) {
       try {
         //
-        if(!music.checked){
-          this.MygetData(music);
-          return;
-        }
-        await this.getMusicData(music);
+        music.checked ? this.MygetData(music).catch(err=>console.log(err)) : this.getMusicData(music).catch(err=>console.log(err))
         this.changePlayerStatus(true);
         this.changePlayBar(true);
         this.setSongList(this.songList);
-        this.setCurrentIndex(this.currentIndex)
+        this.setCurrentIndex(this.currentIndex);
       } catch (err) {
         console.log(err);
-      } finally {
-        console.log("finally");
       }
     },
   },

@@ -104,6 +104,7 @@
           :key="item.id"
           :music="item"
           :songList="Songs"
+          :listIds="listIds"
           :currentIndex="index"
         >
         </Song>
@@ -132,6 +133,7 @@ export default {
       isReady_Suggest: false,
       listIds: [],
       Songs: null,
+      mySongs: null,
       isReady_Song: false,
     };
   },
@@ -141,7 +143,7 @@ export default {
         if (this.inputing) {
           console.log("inputing");
           searchedList(value).then((res) => {
-            if(!res.data.result.allMatch) return;
+            if (!res.data.result.allMatch) return;
             this.suggests = res.data.result.allMatch;
           });
         } else {
@@ -151,21 +153,6 @@ export default {
       } else {
         this.inputing = false;
         this.suggests = [];
-      }
-    },
-    listIds: function (v) {
-      if (v) {
-        this.getSongs(v);
-        this.$toast.loading({
-          message: "加载中...",
-        });
-      }
-    },
-    isReady_Song: function (v) {
-      if (v) {
-        this.$toast.success({
-          message: "加载完成",
-        });
       }
     },
   },
@@ -184,54 +171,50 @@ export default {
         return v.first;
       });
     },
-    getSuggestLists: function (words) {
-      getSuggestList(words).then((res) => {
+    getSuggestLists: async function (words) {
+      await getSuggestList(words).then((res) => {
         if (res) {
-          this.handleSuggestListIds(res.data.result.songs.slice(0, 9));
+          let lists = res.data.result.songs.slice(0, 9);
+          if (lists.length >= 8) {
+            this.listIds = lists
+              .map((item) => {
+                let id = item.id;
+                return id;
+              })
+              .join(",");
+          }
+          this.getSongs(this.listIds);
         }
       });
     },
-    handleSuggestListIds: function (lists) {
-      if (lists.length >= 8) {
-        this.listIds = lists
-          .map((item) => {
-            let id = item.id;
-            return id;
-          })
-          .join(",");
-      } else {
-        console.log("不足9首");
-      }
-    },
-    getSongs: function (ids) {
+    getSongs: async function (ids) {
       //init
       this.Songs = null;
-      getSongById(ids).then((response) => {
+      await getSongById(ids).then((response) => {
         if (response) {
-          this.Songs = this.parseData(response);
+          this.Songs = this.parseData(response, ids);
+
+          console.log(this.Songs);
           this.isReady_Song = true;
         }
       });
     },
-    parseData(response) {
-      console.log(response.data.songs);
-      let result = response.data.songs.map(function (currentValue) {
+    parseData(response, ids) {
+      ids = ids.split(",");
+      let result = response.data.songs.map(function (currentValue, index) {
         let artistsName = "";
         if (currentValue.ar.length >= 2) {
-          artistsName =
-            currentValue.ar[0].name +
-            "/" +
-            currentValue.ar[1].name;
+          artistsName = currentValue.ar[0].name + "/" + currentValue.ar[1].name;
         } else {
           artistsName = currentValue.ar[0].name;
         }
-
         let obj = {
           id: currentValue.al.id,
-          title: currentValue.al.name,
+          title: currentValue.name,
           artists: artistsName,
           album: currentValue.al.name,
-          checked:false
+          otid: ids[index],
+          checked: true,
         };
         return obj;
       });
@@ -283,14 +266,14 @@ export default {
     padding: 1em;
     ul {
       margin-top: 0.5em;
-      text-align: left;
+      text-align: left !important;
       li {
         display: inline-block;
-        padding: 0.3em 0.5em;
+        padding: 0.2em 0.4em;
         text-align: center;
         border: black 1px solid;
         border-radius: 30px;
-        margin: 0 0.5em 0.5em 0;
+        margin: 0 0.3em 0.3em 0;
       }
     }
   }

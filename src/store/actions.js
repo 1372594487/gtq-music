@@ -1,7 +1,9 @@
 import {
   getMusicUrl,
+  mygetMusicUrl,
   getPlaylist,
   getMusicDetail,
+  mygetMusicDetail,
   checkMusic,
   getLrc,
 } from '@/api/getData';
@@ -19,6 +21,7 @@ const actions = {
       let musicUrlData = await getMusicUrl(music.id);
       let musicDetailData = await getMusicDetail(music.id);
       let musicLycicData = await getLrc(music.id);
+      console.log("aaa", musicLycicData.data);
       const {
         lyric
       } = lyricParser(musicLycicData.data);
@@ -34,6 +37,7 @@ const actions = {
         return Promise.reject('false');
       }
       commit('setCurrentMusic', currentMusicData);
+      console.log(currentMusicData);
     } else {
       return Promise.reject('false');
     }
@@ -76,16 +80,43 @@ const actions = {
     //获取当前音乐信息
     commit,
   }, music) {
-    console.log(commit, music);
-    //       album: "起风了"
-    // artists: "周深"
-    // checked: false
-    // id: 94765283
-    // title: "起风了
+    console.log("MygetData");
+    let musicUrlData = await mygetMusicUrl(music.otid).then(res => {
+      console.log(res);
+      return res;
+    }).catch(err=>{
+      console.log(err);
+    });
+    let musicDetailData = await mygetMusicDetail(music.otid).then(res => {
+      console.log(res);
+      return res;
+    }).catch(err=>{
+      console.log(err);
+    });
+    let musicLycicData = await getLrc(music.otid).then(res => {
+      console.log(res.data);
+      return res.data.lrc ? lyricParser(res.data) : "";
+    }).catch(err=>{
+      console.log(err);
+    });
+
+
+    // const {
+    //   lyric
+    // } = lyricParser(musicLycicData.data);
     let currentMusicData = {
-      id:music.id,
+      id: music.otid,
+      url: musicUrlData.data.data[0].url || '',
+      imgUrl: musicDetailData.data.songs[0].al.picUrl,
+      singer: music.artists,
+      song: music.title,
+      lyric: musicLycicData
+    };
+    console.log(currentMusicData);
+    if (!currentMusicData.url) {
+      return Promise.reject('false');
     }
-    
+    commit('setCurrentMusic', currentMusicData);
   }
 }
 export default actions;
