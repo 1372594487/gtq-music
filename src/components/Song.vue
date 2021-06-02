@@ -1,4 +1,4 @@
-<template>
+5<template>
   <a href="javascript: void(0)" class="song" @click="playMusic(music)">
     <div class="song-num" v-if="music.rank" :class="{ highlight: music.color }">
       {{ music.rank }}
@@ -64,6 +64,7 @@ export default {
     playMusic(music) {
       try {
         //
+        console.log("play");
         music.checked ? this.MygetData(music).catch(err=>console.log(err)) : this.getMusicData(music).catch(err=>console.log(err))
         this.changePlayerStatus(true);
         this.changePlayBar(true);

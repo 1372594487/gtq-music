@@ -60,8 +60,8 @@
         />
         <!-- 允许输入正整数，调起纯数字键盘 -->
         <van-field
-          v-model="state.digit"
-          type="digit"
+          v-model="state.code"
+          type="code"
           label="验证码"
           placeholder="请输入验证码"
           maxlength="6"
@@ -95,7 +95,7 @@
 </template>
 
 <script>
-import { Register,SendEmail } from "../../api/getData";
+import { Login, Register,SendEmail } from "../../api/getData";
 import { onActivated, reactive } from "vue";
 import { Toast } from "vant";
 export default {
@@ -128,7 +128,7 @@ export default {
       });
     const validCode = (val) =>
       new Promise((resolve) => {
-        resolve(/^[/d]{6}$/.test(val));
+        resolve(/^\d{6}$/.test(val));
       })
 
     const togglePasswordType = () => {
@@ -169,7 +169,12 @@ export default {
     };
 
 
-    const login = () => {};
+    const login = () => {
+      console.log("login");
+      Login(state).then((res)=>{
+        console.log(res);
+      })
+    };
     const register = () => {
       console.log("register");
       Register(state).then((res) => {

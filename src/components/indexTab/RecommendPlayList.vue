@@ -47,7 +47,7 @@ export default {
        else {
         let response = await getReco();
         console.log(response);
-        let handledList = this.parseData(response);
+        let handledList = this.handleData(response);
         this._localStorage(handledList);
         this.remdList = this.parseData(response);
       }
@@ -60,7 +60,7 @@ export default {
   mounted() {
   },
   methods: {
-    parseData: function (response) {
+    handleData: function (response) {
       let result = response.data.result.map((currentValue) => {
         let obj = {
           id: currentValue.id,

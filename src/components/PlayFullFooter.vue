@@ -63,7 +63,8 @@
     <div class="control">
       <!-- 播放模式 -->
       <span @click.stop="changeMode()"
-        ><svg v-show="playMode == 0"
+        ><svg
+          v-show="playMode == 0"
           t="1609917044643"
           class="icon"
           viewBox="0 0 1024 1024"
@@ -77,14 +78,45 @@
             d="M842 513.7s0 0.1 0 0c0 106.1-86 192.1-192 192.1H393.9c-106 0-192-86-192-192s86-192 192-192h309.8v77.1L890.5 291 703.8 183.2v74H393c-141.4 0-256.1 114.6-256.1 256.1 0 141.4 114.6 256.1 256.1 256.1h256c141.3 0 255.9-114.4 256.1-255.7H842z"
             p-id="10274"
             fill="#8a8a8a"
-          ></path></svg
-      >
-      <svg v-show="playMode==1" t="1609916393480" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2688" width="24" height="24"><path d="M747.093333 596.48a21.333333 21.333333 0 0 1 12.586667 4.096l133.888 97.792a21.333333 21.333333 0 0 1-0.106667 34.56l-133.909333 96.405333a21.333333 21.333333 0 0 1-33.813333-17.322666v-53.482667c-82.858667-0.789333-133.397333-24.896-178.709334-81.088 16.810667-24.192 32.597333-51.029333 47.808-80.554667 36.032 56.213333 68.885333 75.690667 130.901334 76.288V617.813333a21.333333 21.333333 0 0 1 21.333333-21.333333zM746.88 169.472a21.333333 21.333333 0 0 1 12.458667 4.010667l134.058666 96.298666a21.333333 21.333333 0 0 1 0.149334 34.56l-134.08 98.026667a21.333333 21.333333 0 0 1-33.92-17.237333v-55.296c-86.592 0.789333-118.784 37.824-175.381334 161.365333-6.357333 13.930667-9.749333 21.333333-12.906666 28.16-75.946667 164.16-153.642667 236.608-323.541334 239.232H128v-85.76h85.077333c129.152-1.984 182.784-51.989333 246.4-189.482667 3.072-6.656 6.357333-13.866667 12.757334-27.861333 69.141333-150.912 122.88-210.197333 253.333333-211.413333V190.805333a21.333333 21.333333 0 0 1 21.333333-21.333333zM213.76 244.074667c102.442667 1.578667 171.370667 28.544 226.602667 85.717333a981.12 981.12 0 0 0-42.432 82.133333c-44.693333-57.450667-97.493333-80.746667-184.832-82.112H128v-85.76h85.738667z" p-id="2689" fill="#8a8a8a"></path></svg>
+          ></path>
+        </svg>
+        <svg
+          v-show="playMode == 1"
+          t="1609916393480"
+          class="icon"
+          viewBox="0 0 1024 1024"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          p-id="2688"
+          width="24"
+          height="24"
+        >
+          <path
+            d="M747.093333 596.48a21.333333 21.333333 0 0 1 12.586667 4.096l133.888 97.792a21.333333 21.333333 0 0 1-0.106667 34.56l-133.909333 96.405333a21.333333 21.333333 0 0 1-33.813333-17.322666v-53.482667c-82.858667-0.789333-133.397333-24.896-178.709334-81.088 16.810667-24.192 32.597333-51.029333 47.808-80.554667 36.032 56.213333 68.885333 75.690667 130.901334 76.288V617.813333a21.333333 21.333333 0 0 1 21.333333-21.333333zM746.88 169.472a21.333333 21.333333 0 0 1 12.458667 4.010667l134.058666 96.298666a21.333333 21.333333 0 0 1 0.149334 34.56l-134.08 98.026667a21.333333 21.333333 0 0 1-33.92-17.237333v-55.296c-86.592 0.789333-118.784 37.824-175.381334 161.365333-6.357333 13.930667-9.749333 21.333333-12.906666 28.16-75.946667 164.16-153.642667 236.608-323.541334 239.232H128v-85.76h85.077333c129.152-1.984 182.784-51.989333 246.4-189.482667 3.072-6.656 6.357333-13.866667 12.757334-27.861333 69.141333-150.912 122.88-210.197333 253.333333-211.413333V190.805333a21.333333 21.333333 0 0 1 21.333333-21.333333zM213.76 244.074667c102.442667 1.578667 171.370667 28.544 226.602667 85.717333a981.12 981.12 0 0 0-42.432 82.133333c-44.693333-57.450667-97.493333-80.746667-184.832-82.112H128v-85.76h85.738667z"
+            p-id="2689"
+            fill="#8a8a8a"
+          ></path>
+        </svg>
 
-      <svg v-show="playMode==2" t="1609916438784" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3670" width="24" height="24"><path d="M925.1 600.7c-26.3-8.7-54.7 5.8-63.4 32.6-35.2 109-134.3 182.3-246.6 182.3H423.5C280.4 815.5 164 697 164 551.2s116.4-264.3 259.4-264.3h264.3c1.3 17.6 3.4 35.1 6.1 52.7 2.7 17.3 19.7 28.1 36.1 22.9 72.6-23.4 135.7-58.4 189.3-104.9 13.2-11.5 13-32.4-0.4-43.6-54.9-46-117.8-81-188.6-104.9-16.4-5.6-33.7 5.3-36.4 22.8-2.7 17.6-4.7 35.2-6.1 52.7H423.5c-198.4 0-359.9 164.5-359.9 366.6 0 202.2 161.4 366.6 359.9 366.6h191.7c155.7 0 293.1-101.5 342-252.6 8.6-26.8-5.8-55.7-32.1-64.5zM549.9 725.2V390h-30c-11.3 12.7-24.4 23.9-40.4 34.3-16 9.4-31.9 16-46.9 20.2V483c31.4-9.4 57.7-24.4 78.9-46v288.2h38.4z" p-id="3671" fill="#8a8a8a"></path></svg>
+        <svg
+          v-show="playMode == 2"
+          t="1609916438784"
+          class="icon"
+          viewBox="0 0 1024 1024"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          p-id="3670"
+          width="24"
+          height="24"
+        >
+          <path
+            d="M925.1 600.7c-26.3-8.7-54.7 5.8-63.4 32.6-35.2 109-134.3 182.3-246.6 182.3H423.5C280.4 815.5 164 697 164 551.2s116.4-264.3 259.4-264.3h264.3c1.3 17.6 3.4 35.1 6.1 52.7 2.7 17.3 19.7 28.1 36.1 22.9 72.6-23.4 135.7-58.4 189.3-104.9 13.2-11.5 13-32.4-0.4-43.6-54.9-46-117.8-81-188.6-104.9-16.4-5.6-33.7 5.3-36.4 22.8-2.7 17.6-4.7 35.2-6.1 52.7H423.5c-198.4 0-359.9 164.5-359.9 366.6 0 202.2 161.4 366.6 359.9 366.6h191.7c155.7 0 293.1-101.5 342-252.6 8.6-26.8-5.8-55.7-32.1-64.5zM549.9 725.2V390h-30c-11.3 12.7-24.4 23.9-40.4 34.3-16 9.4-31.9 16-46.9 20.2V483c31.4-9.4 57.7-24.4 78.9-46v288.2h38.4z"
+            p-id="3671"
+            fill="#8a8a8a"
+          ></path>
+        </svg>
       </span>
 
-        
       <!-- 上一首 -->
       <span @click.stop="playPrev()">
         <svg
@@ -107,7 +139,7 @@
       <!-- 播放|暂停 -->
       <span @click.stop="togglePlayState">
         <svg
-          v-if="paused"
+          v-if="!paused"
           t="1609917480702"
           class="icon"
           viewBox="0 0 1024 1024"
@@ -193,42 +225,39 @@ export default {
   data: function () {
     return {
       valuel: 0,
-      playMode:0,
+      playMode: 0,
     };
   },
   watch: {
     currentTime: function (v) {
       this.valuel = parseInt(v);
     },
-    paused: function (n) {
-      this.$emit("update:paused", n);
-    },
+    valuel:function(newV,oldV){
+      if(Math.abs(newV -oldV)>2)
+      this.$emit("update:currentTime",this.valuel);
+    }
   },
   methods: {
-    getValue: function (e) {
-      // console.log(e.target.value);
-      this.$emit("update:currentTime", e.target.value);
-    },
-    getVal: function (v) {
-      this.$emit("update:currentTime", v);
+    getVal: function () {
+      this.$emit("update:currentTime",this.valuel);
       return this.valuel;
     },
     down: function () {
-      this.$emit("updata:paused", true);
-      // console.log('updata:paused,down');
+      this.$emit("updata:paused", false);
+      // console.log("updata:paused,down");
     },
     up: function () {
-      this.$emit("updata:paused", false);
-      // console.log('updata:paused,up');
+      this.$emit("updata:paused", true);
+      // console.log("updata:paused,up");
     },
     togglePlayState: function () {
-      console.log(this.paused, this.$refs);
+      // console.log(this.paused, this.$refs);
       if (this.paused) {
         this.$emit("updata:paused", false);
-        console.log("updata:paused t");
+        // console.log("updata:paused t");
       } else {
         this.$emit("updata:paused", true);
-        console.log("updata:paused f");
+        // console.log("updata:paused f");
       }
     },
     //播放模式
@@ -254,23 +283,26 @@ export default {
       // 根据当前播放模式 随机 单曲循环 顺序 顺序循环
       //顺序循环
       let nextIndex;
-      switch (judge){
+      switch (judge) {
         case "next":
-            if (this.currentIndex < this.playlist.length - 1) {
-          nextIndex = this.currentIndex + 1;
-        } else {
-          nextIndex = 0;
-        }
-        return nextIndex;
+          if (this.currentIndex < this.playlist.length - 1) {
+            nextIndex = this.currentIndex + 1;
+          } else {
+            nextIndex = 0;
+          }
+          return nextIndex;
         case "prev":
-          return this.currentIndex==0 ? this.playlist.length - 1 : this.currentIndex - 1;
-        
+          return this.currentIndex == 0
+            ? this.playlist.length - 1
+            : this.currentIndex - 1;
       }
     },
-    changeMode:function(){
-        this.playMode == 2 ? this.playMode=0: this.playMode=this.playMode+1;
-        console.log("this.playMode",this.playMode);
-      }
+    changeMode: function () {
+      this.playMode == 2
+        ? (this.playMode = 0)
+        : (this.playMode = this.playMode + 1);
+      console.log("this.playMode", this.playMode);
+    },
   },
 };
 </script>

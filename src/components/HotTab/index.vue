@@ -48,6 +48,7 @@ export default {
   async created() {
     try {
       let response = await getRank();
+      console.log(response);
       this.rank = this.parseData(response);
     } catch {
       this.error = true;

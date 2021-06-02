@@ -52,6 +52,9 @@ const mutations = {
   },
   changePlayFull(state,status){
       state.isShowPlayFull = status
+  },
+  toggleLyric(state){
+    state.isShowLyric = !state.isShowLyric
   }
 };
 

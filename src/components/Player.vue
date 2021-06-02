@@ -85,8 +85,37 @@
         <!-- header -->
         <PlayFullHeader></PlayFullHeader>
         <!-- lyric -->
-            <PlayFullChart
+        <transition
+            name="custom-classes-transition"
+            enter-active-class="animate__animated animate__fadeIn"
+            leave-active-class="animate__animated animate__fadeOut"
+          >
+          <keep-alive>
+            <PlayFullyric
+              v-if="isShowLyric"
+              @click="_toggleLyric"
             />
+          </keep-alive>
+          </transition>
+          <transition
+            name="custom-classes-transition"
+            enter-active-class="animate__animated animate__fadeIn"
+            leave-active-class="animate__animated animate__fadeOut"
+          >
+          <PlayFullChart
+          @click="_toggleLyric"
+          />
+          </transition>
+        <PlayFullFooter
+          :paused="playerStatus"
+          :currentTime="currentTime"
+          :duration="totalTime"
+          :currentIndex="currentIndex"
+          :playlist="songList"
+          @update:currentTime="updataCurrentTime($event)"
+          @updata:paused="pauseStateChange($event)"
+          @update:music="changeSong($event)"
+        />
       </div>
     </transition>
   </div>
@@ -95,15 +124,15 @@
 <script>
 import PlayFullHeader from "@/components/PlayFullHeader.vue";
 import PlayFullChart from "@/components/PlayFullChart.vue";
-// import PlayFullyric from "@/components/PlayFullyric.vue";
-// import PlayFullFooter from "@/components/PlayFullFooter.vue";
+import PlayFullyric from "@/components/PlayFullyric.vue";
+import PlayFullFooter from "@/components/PlayFullFooter.vue";
 import { mapGetters, mapMutations, mapActions } from "vuex";
 export default {
   components: {
     PlayFullHeader,
     PlayFullChart,
-    // PlayFullyric,
-    // PlayFullFooter,
+    PlayFullyric,
+    PlayFullFooter,
   },
   data: function () {
     return {};
@@ -129,7 +158,6 @@ export default {
     //
     audio.addEventListener("pause", () => {
       this.changePlayerStatus(false);
-      console.log(this.playerStatus);
     });
     //
     audio.addEventListener("play", () => {
@@ -163,6 +191,7 @@ export default {
       "setCurrentIndex",
       "changePlayBar",
       "changePlayFull",
+      "toggleLyric",
     ]),
     togglePlayState: function () {
       let audio = this.$refs.audio;
@@ -200,8 +229,14 @@ export default {
     playNext: function () {
       console.log("下一曲");
       let index = this.calculateNext();
-      console.log(index);
+      console.log(index, this.songList);
       this.getMusicData(this.songList[index]);
+      this.setCurrentIndex(index);
+    },
+    //
+    changeSong: function (e) {
+      let { index, item } = e;
+      this.getMusicData(item);
       this.setCurrentIndex(index);
     },
     //
@@ -221,6 +256,19 @@ export default {
       this.changePlayBar(false);
       this.changePlayFull(true);
     },
+    //
+    pauseStateChange: function (e) {
+      //
+      let audio = this.$refs.audio;
+      e ? audio.play() : audio.pause();
+    },
+    updataCurrentTime: function (e) {
+      let audio = this.$refs.audio;
+      audio.currentTime = e;
+    },
+    _toggleLyric:function(){
+      this.toggleLyric();
+    }
   },
 };
 </script>

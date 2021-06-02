@@ -60,4 +60,13 @@ export const SendEmail = ({email,password,code}) => axios({
       code,
   }
 })
+//send Email
+export const Login = ({email,password}) => axios({
+  method: 'POST',
+  url: `${target}/login`,
+  data: {
+      email,
+      password,
+  }
+})
 
